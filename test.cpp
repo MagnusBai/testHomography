@@ -9,7 +9,7 @@ int main() {
 
   Mat im_src_display = im_src.clone();
   Point2f nw_point_src(220.f, 54.f);
-  Point2f ne_point_src(690.f, 187.f);
+  Point2f ne_point_src(690.f, 200.f);
   Point2f se_point_src(706.f, 519.f);
   Point2f sw_point_src(207.f, 432.f);
 
