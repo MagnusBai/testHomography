@@ -32,32 +32,36 @@ int main() {
                               sw_point_dst} );
 
   // Calc Homography
-  Mat h = findHomography(pts_src, pts_dst);
+  Mat mat_homo = findHomography(pts_src, pts_dst);
 
-  cout << "Homography Mat\'s size is: " ;
-  cout << h.cols << ", " << h.rows << ": " << h.depth() << ": " << h.type() << endl;
-  cout << h << endl << endl;
+  cout << "Homography Mat\'s size: " ;
+  cout << mat_homo.cols << "x" << mat_homo.rows << ": " << mat_homo.depth() << endl;
+  cout << mat_homo << endl << endl;
 
-  float mem_data[3] = {220.f, 54.f, 1.f};
-  Mat src_homogeneous_vector(3, 1, CV_32F, mem_data);
-  cout << "homogeneous vector\'s size is: " ;
-  cout << src_homogeneous_vector.cols << ", " << src_homogeneous_vector.rows << ": " << h.depth() << ": " << h.type() << endl;
-  cout << src_homogeneous_vector << endl << endl;
-
-  // Mat res_mat(3, 1, CV_32F);
-  auto res_mat = h.mul(src_homogeneous_vector);
-  cout << res_mat << endl << endl;
-//  cout << "res mat\'s size is: " ;
-//  cout << res.cols << ", " << res.rows << endl;
-//  cout << res.at<float>(0, 0) << endl;
-//  cout << res.at<float>(1, 0) << endl;
-//  cout << res.at<float>(2, 0) << endl << endl;
+  float mem_data[3][1] = {{sw_point_src.x}, 
+                          {sw_point_src.y}, 
+                          {1.f}};
+  Mat mat_vec(3, 1, CV_32F, mem_data);
+  cout << "homogeneous vector\'s size: " ;
+  cout << mat_vec.cols << "x" << mat_vec.rows << ": " << mat_vec.depth() << endl;
+  cout << mat_vec << endl << endl;
   
-  
+  Mat mat_homo_;
+  mat_homo.convertTo(mat_homo_, mat_vec.depth());
+
+  Mat res_vector = mat_homo_*mat_vec;
+  cout << "result vector\'s size: " ;
+  cout << res_vector.cols << "x" << res_vector.rows << ": " << res_vector.depth() << endl;
+  cout << res_vector << endl << endl;
+
+  // (xd, yd)->points of destinition (xs, ys)->points of source
+  //  (xd)              (xs)
+  //  (yd) = (mat_homo)*(ys)
+  //  (1 )              (1 )
 
   // Output image
   Mat im_out;
-  warpPerspective(im_src, im_out, h, im_src.size());
+  warpPerspective(im_src, im_out, mat_homo, Size(300, 200));  // has much relationship with size
 
   imwrite("result.png", im_out);
 
