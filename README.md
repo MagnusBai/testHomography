@@ -1,3 +1,3 @@
-# It is just an accident-proof copy of Homography demo
+# Homography demo
 
-nothing much
+just an accident-proof duplication.
